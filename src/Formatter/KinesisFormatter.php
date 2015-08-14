@@ -4,6 +4,11 @@ namespace CascadeEnergy\Monolog\Formatter;
 
 use Monolog\Formatter\FormatterInterface;
 
+/**
+ * This formatter just JSON encodes the incoming record (or records) then wraps the
+ * result in a structure suitable for either a Kinesis PutRecord or PutRecords call
+ * (depending on whether a single record or batch of records is being handled).
+ */
 class KinesisFormatter implements FormatterInterface
 {
     /**
@@ -38,5 +43,4 @@ class KinesisFormatter implements FormatterInterface
 
         return ['Records' => $kinesisRecords];
     }
-
 }

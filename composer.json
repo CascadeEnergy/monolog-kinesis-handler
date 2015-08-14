@@ -1,5 +1,5 @@
 {
-  "name": "cascade-energy/monolog-kinesis",
+  "name": "cascade-energy/monolog-kinesis-handler",
   "description": "Kinesis handler for Monolog",
   "minimum-stability": "stable",
   "license": "MIT",

@@ -51,8 +51,15 @@ class KinesisHandler extends AbstractProcessingHandler
         $content = $record['formatted'];
         $content['StreamName'] = $this->streamName;
 
-        /** @noinspection PhpUndefinedMethodInspection */
-        $this->kinesisClient->putRecord($content);
+        try {
+            /** @noinspection PhpUndefinedMethodInspection */
+            $this->kinesisClient->putRecord($content);
+        } catch (\Exception $ex) {
+            // We intentionally eat exceptions here -- the purpose of this handler is to emit logs to Kinesis for
+            // real-time monitoring, not to guarantee delivery of mission critical logs. If Kinesis cannot accept
+            // the log at this time, we just drop it on the floor and move on.
+            // @TODO: A more durable (but slower) approach to exception handling would be a nice future option
+        }
     }
 
     /**
@@ -63,8 +70,12 @@ class KinesisHandler extends AbstractProcessingHandler
         $kinesisParameters = $this->getFormatter()->formatBatch($records);
         $kinesisParameters['StreamName'] = $this->streamName;
 
-        /** @noinspection PhpUndefinedMethodInspection */
-        $this->kinesisClient->putRecords($kinesisParameters);
+        try {
+            /** @noinspection PhpUndefinedMethodInspection */
+            $this->kinesisClient->putRecords($kinesisParameters);
+        } catch (\Exception $ex) {
+            // As above, we intentionally allow logs to drop when Kinesis fails for any reason
+        }
 
         return false === $this->bubble;
     }

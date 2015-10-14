@@ -1,0 +1,21 @@
+# PHP Storm IDE
+.idea
+
+# Composer
+composer.phar
+vendor/
+
+# Test and build artifacts
+build
+
+# Credentials and local configuration files
+credentials.yml
+credentials.json
+credentials.xml
+local.yml
+local.json
+local.xml
+*.local.*
+
+# Temporary files (useful for uploading initial setup files to a server, etc)
+tmp/
